@@ -1,0 +1,16 @@
+echo "# SampleTokenizeTSLAstock" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/iantstaley/SampleTokenizeTSLAstock.git
+git push -u origin main
+pragma solidity ^0.8.0;
+
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
+contract TeslaStockToken is ERC20 {
+  constructor() ERC20("Tesla Stock Token", "TSLA") {
+    _mint(msg.sender, 1000000 * 10 ** decimals());
+  }
+}
