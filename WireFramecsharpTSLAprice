@@ -1,0 +1,38 @@
+echo "# SampleTokenizeTSLAstock" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/iantstaley/SampleTokenizeTSLAstock.git
+git push -u origin main
+pragma solidity ^0.8.0;
+
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+
+contract TeslaStockToken is ERC20 {
+  AggregatorV3Interface internal priceFeed;
+
+  constructor() ERC20("Tesla Stock Token", "TSLA") {
+    priceFeed = AggregatorV3Interface(0x8A791620dd6260079BF849Dc5567aDC3F2FdC318);
+    _mint(msg.sender, 1000000 * 10 ** decimals());
+  }
+
+  function updateTokenPrice() public {
+    (
+      uint80 roundID,
+      int price,
+      uint startedAt,
+      uint timeStamp,
+      uint80 answeredInRound
+    ) = priceFeed.latestRoundData();
+    uint decimals = priceFeed.decimals();
+    uint priceInWei = uint(price) * 10 ** (18 - decimals);
+    uint tokenPrice = priceInWei / 100;
+    _setPrice(tokenPrice);
+  }
+
+  function _setPrice(uint price) internal {
+    // Set the token price to the latest price fetched from the Chainlink Oracle
+  }
+}
